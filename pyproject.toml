@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "gptrouter"
+version = "0.1.0"
+description = "ChatGPT router"
+authors = ["Tae Min Ha <taemin410@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.95.1"
+autopep8 = "^2.0.2"
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
+
+[tool.poetry.group.dev.dependencies]
+fastapi = "^0.95.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

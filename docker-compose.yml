@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  dev:
+    build: .
+    command: bash -c "poetry run uvicorn app.main:app --reload --host=0.0.0.0 --port=8000"
+    ports:
+      - "8000:8000"
+    # depends_on:
+    #   - db
+    environment:
+      - DB_URL=mysql://root:password@db:3306/testdb 
+    volumes:
+      - ".:/usr/src"
+  # db:
+  #   image: mysql
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=password
+  #     - MYSQL_DATABASE=test
