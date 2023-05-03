@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   dev:
@@ -9,8 +9,7 @@ services:
     # depends_on:
     #   - db
     environment:
-      - DB_URL=mysql://root:password@db:3306/testdb 
-      - OPENAI_API_KEY=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 
+      - DB_URL=mysql://root:password@db:3306/testdb
     volumes:
       - ".:/usr/src"
   # db:

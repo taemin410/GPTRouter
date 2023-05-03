@@ -6,6 +6,9 @@ WORKDIR /usr/src
 ARG ENV
 ENV ENV=$ENV
 
+ARG OPENAI_API_KEY
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
+
 RUN pip install poetry
 
 COPY ./poetry.lock ./pyproject.toml ./
