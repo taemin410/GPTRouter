@@ -83,10 +83,11 @@ async def openai_exception_handler(request: Request, exc: OpenAIError):
 
 
 @app.post("/chatgpt", tags=["openai"], response_model=ResponseCompletion)
-def make_chatgpt_request_to_openai(completion_request: RequestCompletion):
+async def make_chatgpt_request_to_openai(completion_request: RequestCompletion):
     # @TODO: Handle model name param
+    completion = await create_completion_request(prompt=completion_request.prompt)
     return ResponseCompletion(
-        completion=create_completion_request(prompt=completion_request.prompt)
+        completion=completion
     )
 
 
