@@ -1,14 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-# from fastapi.responses import JSONResponse
-# from sqlalchemy.exc import SQLAlchemyError
-
-# from app.databases import db
-# from app.routes.v1 import token, whitelist
+from openai import OpenAIError
+from fastapi.responses import JSONResponse
+import openai
 from app.config import get_settings
 
 import logging
 import os
+
+from app.openai.request import create_completion_request
+from app.schemas.openai_request import RequestCompletion
+from app.schemas.openai_response import ResponseCompletion
 
 
 def init_logging():
@@ -26,10 +28,11 @@ def init_logging():
 
 def start_app():
     settings = get_settings()
+    openai.api_key = os.getenv("OPENAI_API_KEY")
 
     configs = {
         "DB_URL": settings.db_url,
-        "DB_POOL_RECYCLE": 900, # check pool cycle num
+        "DB_POOL_RECYCLE": 900,  # check pool cycle num
         "DB_ECHO": False,
     }
 
@@ -70,6 +73,21 @@ app = start_app()
 #         status_code=500,
 #         content={"message": f"Oops! {exc}"},
 #     )
+
+@app.exception_handler(OpenAIError)
+async def openai_exception_handler(request: Request, exc: OpenAIError):
+    return JSONResponse(
+        status_code=503,
+        content={"message": f"Oops! OpenAI API request failed: {exc} "},
+    )
+
+
+@app.post("/chatgpt", tags=["openai"], response_model=ResponseCompletion)
+def make_chatgpt_request_to_openai(completion_request: RequestCompletion):
+    # @TODO: Handle model name param
+    return ResponseCompletion(
+        completion=create_completion_request(prompt=completion_request.prompt)
+    )
 
 
 @app.get("/health-check", tags=["health_check"])
