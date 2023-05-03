@@ -6,11 +6,11 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: apac-northeast-2
+  AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: gptrouter
   ECS_SERVICE: GPTRouter
   ECS_CLUSTER: ChatGptApiRouter
-  ECS_TASK_DEFINITION: task-definition.json
+  ECS_TASK_DEFINITION: ./task-definition.json
   CONTAINER_NAME: gptrouter           # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
 
