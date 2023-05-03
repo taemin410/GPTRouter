@@ -38,7 +38,7 @@
     }
   ],
   "family": "ChatGptApiRouter",
-  "executionRoleArn": "arn:aws:iam::063003812447:user/github-cicd-action",
+  "executionRoleArn": "arn:aws:iam::063003812447:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
   "revision": 1,
   "volumes": [],
