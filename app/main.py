@@ -101,6 +101,8 @@ async def make_chatgpt_request_to_openai(completion_request: RequestCompletion):
 @app.post("/api/chat", tags=["kakao"], response_model=KakaoChatbotResponse)
 async def make_chatgpt_request_to_openai_from_kakao(completion_request: KakaoChatbotRequest):
     completion = await create_completion_request(prompt=completion_request.userRequest.utterance)
+    # erase newline
+    completion = completion.strip()
     template = {
         "outputs": [
             {"simpleText": {"text": completion}}
