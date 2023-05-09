@@ -37,6 +37,7 @@
     }
   ],
   "family": "ChatGptApiRouter",
+  "taskRoleArn": "arn:aws:iam::063003812447:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::063003812447:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
