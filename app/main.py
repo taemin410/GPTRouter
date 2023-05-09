@@ -9,6 +9,8 @@ import logging
 import os
 
 from app.openai.request import create_completion_request
+from app.schemas.kakao_request import KakaoChatbotRequest
+from app.schemas.kakao_response import KakaoChatbotResponse
 from app.schemas.openai_request import RequestCompletion
 from app.schemas.openai_response import ResponseCompletion
 
@@ -82,13 +84,29 @@ async def openai_exception_handler(request: Request, exc: OpenAIError):
     )
 
 
+@app.post("/model", tags=["openai"])
+async def set_model_name(model_name: str):
+    get_settings().model_name = model_name
+    return get_settings().model_name
+
+
 @app.post("/chatgpt", tags=["openai"], response_model=ResponseCompletion)
 async def make_chatgpt_request_to_openai(completion_request: RequestCompletion):
-    # @TODO: Handle model name param
     completion = await create_completion_request(prompt=completion_request.prompt)
     return ResponseCompletion(
         completion=completion
     )
+
+
+@app.post("/api/chat", tags=["kakao"], response_model=KakaoChatbotResponse)
+async def make_chatgpt_request_to_openai_from_kakao(completion_request: KakaoChatbotRequest):
+    completion = await create_completion_request(prompt=completion_request.userRequest.utterance)
+    template = {
+        "output": [
+            {"simpleText": {"text": completion}}
+        ]
+    }
+    return KakaoChatbotResponse(version="2.0", template=template)
 
 
 @app.get("/health-check", tags=["health_check"])
