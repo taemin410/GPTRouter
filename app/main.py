@@ -90,6 +90,12 @@ async def set_model_name(model_name: str):
     return get_settings().model_name
 
 
+@app.post("/max-tokens", tags=["openai"])
+async def set_max_tokens(max_tokens: int):
+    get_settings().max_tokens = max_tokens
+    return get_settings().max_tokens
+
+
 @app.post("/chatgpt", tags=["openai"], response_model=ResponseCompletion)
 async def make_chatgpt_request_to_openai(completion_request: RequestCompletion):
     completion = await create_completion_request(prompt=completion_request.prompt)
