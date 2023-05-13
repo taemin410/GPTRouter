@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAIError
 from fastapi.responses import JSONResponse
@@ -8,9 +8,9 @@ from app.config import get_settings
 import logging
 import os
 
-from app.openai.request import create_completion_request
+from app.openai.request import create_callback_request_kakao, create_completion_request
 from app.schemas.kakao_request import KakaoChatbotRequest
-from app.schemas.kakao_response import KakaoChatbotResponse
+from app.schemas.kakao_response import KakaoChatbotResponse, KakaoChatbotResponseCallback
 from app.schemas.openai_request import RequestCompletion
 from app.schemas.openai_response import ResponseCompletion
 
@@ -115,6 +115,16 @@ async def make_chatgpt_request_to_openai_from_kakao(completion_request: KakaoCha
         ]
     }
     return KakaoChatbotResponse(version="2.0", template=template)
+
+
+@app.post("/api/chat/callback", tags=["kakao"], response_model=KakaoChatbotResponseCallback)
+async def make_chatgpt_async_callback_request_to_openai_from_kakao(
+        completion_request: KakaoChatbotRequest,
+        background_tasks: BackgroundTasks):
+
+    background_tasks.add_task(create_callback_request_kakao,
+                              prompt=completion_request.userRequest.utterance, url=completion_request.userRequest.callbackUrl)
+    return KakaoChatbotResponseCallback(version="2.0", callback=True)
 
 
 @app.get("/health-check", tags=["health_check"])

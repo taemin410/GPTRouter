@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -16,3 +17,9 @@ class Template(BaseModel):
 class KakaoChatbotResponse(BaseModel):
     version: str
     template: Template
+
+
+class KakaoChatbotResponseCallback(BaseModel):
+    version: str
+    callback: bool
+    template: Optional[Template]

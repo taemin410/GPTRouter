@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel
 
@@ -53,6 +53,7 @@ class Params(BaseModel):
 
 
 class UserRequest(BaseModel):
+    callbackUrl: Optional[str]
     block: Block
     user: User
     utterance: str
