@@ -124,7 +124,7 @@ async def make_chatgpt_async_callback_request_to_openai_from_kakao(
 
     background_tasks.add_task(create_callback_request_kakao,
                               prompt=completion_request.userRequest.utterance, url=completion_request.userRequest.callbackUrl)
-    return KakaoChatbotResponseCallback(version="2.0", callback=True)
+    return KakaoChatbotResponseCallback(version="2.0", useCallback=True)
 
 
 @app.get("/health-check", tags=["health_check"])
