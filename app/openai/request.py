@@ -60,7 +60,8 @@ async def create_chat_request(messages: list[Message]) -> str:
         }
     ]
 
-    joined_messages = messages_base + messages[:-NUMBER_OF_CHAT_HISTORY]
+    last_n_messages = messages[-NUMBER_OF_CHAT_HISTORY:]
+    joined_messages = messages_base + [msg.dict() for msg in last_n_messages]
 
     chat_completion = await openai.ChatCompletion.acreate(
 
