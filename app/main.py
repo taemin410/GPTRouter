@@ -8,10 +8,10 @@ from app.config import get_settings
 import logging
 import os
 
-from app.openai.request import create_callback_request_kakao, create_completion_request
+from app.openai.request import create_callback_request_kakao, create_chat_request, create_completion_request
 from app.schemas.kakao_request import KakaoChatbotRequest
-from app.schemas.kakao_response import KakaoChatbotResponse, KakaoChatbotResponseCallback
-from app.schemas.openai_request import RequestCompletion
+from app.schemas.kakao_response import KakaoChatbotResponse, KakaoChatbotResponseCallback, SimpleText
+from app.schemas.openai_request import RequestChat, RequestCompletion
 from app.schemas.openai_response import ResponseCompletion
 
 
@@ -96,8 +96,23 @@ async def set_max_tokens(max_tokens: int):
     return get_settings().max_tokens
 
 
+@app.post("/chat-completion", tags=["openai"], response_model=SimpleText)
+async def make_chatgpt_chat_request(chat_request: RequestChat):
+
+    completion = await create_chat_request(messages=chat_request.messages)
+    return SimpleText(text=completion)
+
+
+@app.post("/completion", tags=["openai"], response_model=ResponseCompletion)
+async def make_chatgpt_completion_request_v2(completion_request: RequestCompletion):
+    completion = await create_completion_request(prompt=completion_request.prompt)
+    return ResponseCompletion(
+        completion=completion
+    )
+
+
 @app.post("/chatgpt", tags=["openai"], response_model=ResponseCompletion)
-async def make_chatgpt_request_to_openai(completion_request: RequestCompletion):
+async def make_chatgpt_completion_request(completion_request: RequestCompletion):
     completion = await create_completion_request(prompt=completion_request.prompt)
     return ResponseCompletion(
         completion=completion
