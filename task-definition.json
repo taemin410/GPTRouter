@@ -2,7 +2,7 @@
   "containerDefinitions": [
     {
       "name": "gptrouter",
-      "image": "063003812447.dkr.ecr.ap-northeast-2.amazonaws.com/gptrouter:latest",
+      "image": "908566102485.dkr.ecr.ap-northeast-2.amazonaws.com/gptrouter:latest",
       "cpu": 0,
       "portMappings": [
         {
@@ -37,8 +37,8 @@
     }
   ],
   "family": "ChatGptApiRouter",
-  "taskRoleArn": "arn:aws:iam::063003812447:role/ecsTaskExecutionRole",
-  "executionRoleArn": "arn:aws:iam::063003812447:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::908566102485:role/ECSTaskExecutioner",
+  "executionRoleArn": "arn:aws:iam::908566102485:role/ECSTaskExecutioner",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
