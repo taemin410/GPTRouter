@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: gptrouter
-  ECS_SERVICE: ChatGptApiService
+  ECS_SERVICE: ChatGptApiService-001
   ECS_CLUSTER: GptRouterCluster
   ECS_TASK_DEFINITION: ./task-definition.json
   CONTAINER_NAME: gptrouter
