@@ -9,6 +9,7 @@ import logging
 import os
 
 from app.openai.request import create_callback_request_kakao, create_chat_request, create_completion_request
+from app.schemas.kakao_ai_chatbot_request import KakaoAIChatbotRequest
 from app.schemas.kakao_request import KakaoChatbotRequest
 from app.schemas.kakao_response import KakaoChatbotResponse, KakaoChatbotResponseCallback, SimpleText
 from app.schemas.openai_request import RequestChat, RequestCompletion
@@ -134,11 +135,11 @@ async def make_chatgpt_request_to_openai_from_kakao(completion_request: KakaoCha
 
 @app.post("/api/chat/callback", tags=["kakao"], response_model=KakaoChatbotResponseCallback)
 async def make_chatgpt_async_callback_request_to_openai_from_kakao(
-        completion_request: KakaoChatbotRequest,
+        kakao_ai_request: KakaoAIChatbotRequest,
         background_tasks: BackgroundTasks):
 
     background_tasks.add_task(create_callback_request_kakao,
-                              prompt=completion_request.userRequest.utterance, url=completion_request.userRequest.callbackUrl)
+                              prompt=kakao_ai_request.userRequest.utterance, url=kakao_ai_request.userRequest.callbackUrl)
     return KakaoChatbotResponseCallback(version="2.0", useCallback=True)
 
 

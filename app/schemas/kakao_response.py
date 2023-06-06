@@ -22,4 +22,4 @@ class KakaoChatbotResponse(BaseModel):
 class KakaoChatbotResponseCallback(BaseModel):
     version: str
     useCallback: bool
-    template: Optional[Template]
+    # template: Optional[Template]
