@@ -26,22 +26,23 @@ async def create_completion_request(prompt: str) -> str:
 
 async def create_callback_request_kakao(prompt: str, url: str) -> dict:
 
-    completion_text = await create_completion_request(prompt)
-    template = {
-        "outputs": [
-            {"simpleText": {"text": completion_text}}
-        ]
-    }
+    try:
+        completion_text = await create_completion_request(prompt)
+        template = {
+            "outputs": [
+                {"simpleText": {"text": completion_text}}
+            ]
+        }
+        res = requests.post(url, json=KakaoChatbotResponse(
+            version="2.0", template=template).json())
 
-    res = requests.post(url, json=KakaoChatbotResponse(
-        version="2.0", template=template).json())
+        if not res.ok:
+            logging.error(f"[ERROR] Kakao POST {url} failed.")
 
-    if not res.ok:
-        raise HTTPException(
-            status_code=503, detail=f"Kakao POST {url} failed.")
+        print(f"sent request to kakao POST {url}, Code: {res.status_code}")
 
-    print(f"sent request successfully to kakao POST {url}, {res.status_code}")
-    logger.info(res.json())
+    except openai.OpenAIError as e:
+        print(e)
 
 
 async def create_chat_request(messages: list[Message]) -> str:
