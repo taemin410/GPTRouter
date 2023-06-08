@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 NUMBER_OF_CHAT_HISTORY = 5
 TEMPERATURE = 0.7
 
+
 async def create_completion_request(prompt: str) -> str:
     settings = get_settings()
 
@@ -28,6 +29,9 @@ async def create_callback_request_kakao(prompt: str, url: str) -> dict:
 
     try:
         completion_text = await create_completion_request(prompt)
+        # erase new line in front
+        completion_text = str(completion_text).strip()
+
         template = {
             "outputs": [
                 {"simpleText": {"text": completion_text}}
@@ -51,8 +55,8 @@ async def create_chat_request(messages: list[Message]) -> str:
 
     messages_base = [
         {
-            "role" : 'system',
-            "content" : """An AI assistant that is a medical expert in emergency and hospitals have an inspiring and humorous conversation.
+            "role": 'system',
+            "content": """An AI assistant that is a medical expert in emergency and hospitals have an inspiring and humorous conversation.
             AI assistant is a brand new, powerful, human-like artificial intelligence.
             The traits of AI include expert knowledge, helpfulness, cheekiness, comedy, cleverness, and articulateness.
             AI is a well-behaved and well-mannered individual.
