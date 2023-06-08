@@ -33,8 +33,9 @@ async def create_callback_request_kakao(prompt: str, url: str) -> dict:
                 {"simpleText": {"text": completion_text}}
             ]
         }
-        res = requests.post(url, json=KakaoChatbotResponse(
-            version="2.0", template=template).json())
+        request_body = KakaoChatbotResponse(
+            version="2.0", template=template).dict()
+        res = requests.post(url, json=request_body)
 
         if not res.ok:
             logging.error(f"[ERROR] Kakao POST {url} failed.")
